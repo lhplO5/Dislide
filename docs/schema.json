@@ -1,0 +1,48 @@
+{
+    "version": "1.0",
+    "metadata": {
+        "title": "Bài giảng: Cấu trúc dữ liệu và Giải thuật",
+        "source_pdf": "slide_01.pdf",
+        "page_number": 1
+    },
+    "blocks": [
+        {
+            "id": "block-a1b2",
+            "type": "heading",
+            "properties": {
+                "level": 2
+            },
+            "content": "Khái niệm Cây Nhị Phân (Binary Tree)",
+            "floating_elements": []
+        },
+        {
+            "id": "block-c3d4",
+            "type": "paragraph",
+            "content": "Cây nhị phân là một cấu trúc dữ liệu dạng cây mà mỗi node có tối đa hai node con, được gọi là node con trái và node con phải.",
+            "floating_elements": []
+        },
+        {
+            "id": "block-e5f6",
+            "type": "math",
+            "content": "O(\\log n)",
+            "floating_elements": [
+                {
+                    "id": "float-img-1",
+                    "type": "image",
+                    "src": "local://app_data/slides/img_binary_tree.png",
+                    "offsetX": 250,
+                    "offsetY": -40
+                }
+            ]
+        },
+        {
+            "id": "block-g7h8",
+            "type": "ai_response",
+            "content": "AI: Thời gian tìm kiếm O(log n) chỉ đúng nếu đây là Cây nhị phân tìm kiếm (BST) và cây đã được cân bằng. Nếu cây bị lệch, thời gian sẽ suy biến thành O(n).",
+            "properties": {
+                "status": "completed"
+            },
+            "floating_elements": []
+        }
+    ]
+}
