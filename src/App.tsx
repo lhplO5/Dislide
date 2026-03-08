@@ -14,7 +14,8 @@ function App() {
 
   return (
     <main className="container">
-      <h1>Welcome to Tauri + React</h1>
+      <h1>Welcome to Dislide!</h1>
+      <p>Không gian làm việc Block-based đang được xây dựng...</p>
 
       <div className="row">
         <a href="https://vite.dev" target="_blank">
