@@ -1,5 +1,7 @@
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
+import 'katex/dist/katex.min.css';
+import { MathExtension } from './MathExtension';
 
 interface BlockEditorProps {
     initialContent: string;
@@ -9,6 +11,7 @@ const BlockEditor = ({ initialContent }: BlockEditorProps) => {
     const editor = useEditor({
         extensions: [
             StarterKit,
+            MathExtension,
         ],
         content: initialContent,
         editorProps: {
