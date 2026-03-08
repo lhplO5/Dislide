@@ -1,50 +1,27 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import { invoke } from "@tauri-apps/api/core";
 import "./App.css";
+import BlockEditor from "./components/BlockEditor";
+import dummyData from '../docs/schema.json';
 
 function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
-
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    setGreetMsg(await invoke("greet", { name }));
+  const parseSchemaToHTML = (schema: any) => {
+    return schema.blocks.map((block: any) => {
+      if (block.type === 'heading') return `<h2>${block.content}</h2>`;
+      if (block.type === 'math') return `<p><em>Formula: ${block.content}</em></p>`;
+      if (block.type === 'ai_response') return `<blockquote style="border-left: 4px solid #8b5cf6; padding-left: 12px; color: #6d28d9; background: #f5f3ff; margin: 10px 0;">${block.content}</blockquote>`;
+      return `<p>${block.content}</p>`;
+    }).join('');
   }
+  const initialHTML = parseSchemaToHTML(dummyData);
 
   return (
-    <main className="container">
-      <h1>Welcome to Dislide!</h1>
-      <p>Không gian làm việc Block-based đang được xây dựng...</p>
-
-      <div className="row">
-        <a href="https://vite.dev" target="_blank">
-          <img src="/vite.svg" className="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img src="/tauri.svg" className="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <p>Click on the Tauri, Vite, and React logos to learn more.</p>
-
-      <form
-        className="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input
-          id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
-        />
-        <button type="submit">Greet</button>
-      </form>
-      <p>{greetMsg}</p>
+    <main style={{ maxWidth: '800px', margin: '0 auto', paddingTop: '3rem', fontFamily: 'sans-serif' }}>
+      <h1 style={{ textAlign: 'center', marginBottom: '1rem', color: '#1e293b' }}>
+        {dummyData.metadata.title}
+      </h1>
+      <p style={{ textAlign: 'center', color: '#64748b', marginBottom: '2rem' }}>
+        Draft Editor - Dislide
+      </p>
+      <BlockEditor initialContent={initialHTML} />
     </main>
   );
 }
