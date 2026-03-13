@@ -1,8 +1,11 @@
 import "./App.css";
 import BlockEditor from "./components/BlockEditor";
-import dummyData from '../docs/schema.json';
+import { useState } from 'react';
 
 function App() {
+  const [htmlContent, setHtmlContent] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const parseSchemaToHTML = (schema: any) => {
     return schema.blocks.map((block: any) => {
       if (block.type === 'heading') return `<h2>${block.content}</h2>`;
@@ -11,17 +14,53 @@ function App() {
       return `<p>${block.content}</p>`;
     }).join('');
   }
-  const initialHTML = parseSchemaToHTML(dummyData);
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setIsLoading(true);
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/parse-pdf', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) throw new Error('Error in API Backend!');
+
+      const schema = await response.json();
+      const parsedHTML = parseSchemaToHTML(schema);
+      setHtmlContent(parsedHTML);
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Can't connect to the AI Engine. Please make sure your Python server is still running!");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <main style={{ maxWidth: '800px', margin: '0 auto', paddingTop: '3rem', fontFamily: 'sans-serif' }}>
       <h1 style={{ textAlign: 'center', marginBottom: '1rem', color: '#1e293b' }}>
-        {dummyData.metadata.title}
+        Dislide
       </h1>
-      <p style={{ textAlign: 'center', color: '#64748b', marginBottom: '2rem' }}>
-        Draft Editor - Dislide
-      </p>
-      <BlockEditor initialContent={initialHTML} />
+      {/* Upload PDF */}
+      <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+        <input
+          type="file"
+          accept=".pdf"
+          onChange={handleFileUpload}
+          disabled={isLoading}
+          style={{ marginBottom: '1rem' }}
+        />
+        {isLoading && <p style={{ color: '#8b5cf6', fontWeight: 'bold' }}>Loading</p>}
+      </div>
+
+      {htmlContent && (
+        <BlockEditor initialContent={htmlContent} />
+      )}
     </main>
   );
 }
